@@ -85,7 +85,8 @@ public class SculkSensorBlockEntityRenderer extends BlockEntityRenderer<SculkSen
         public void render(MatrixStack matrixStack, VertexConsumer buffer, float tickDelta, int light, int overlay, float red, float green, float blue, float alpha) {
             if(entity.isPowered()) {
                 float r = entity.getAnimationProgress() > 0 ? (float) (Math.cos((entity.getAnimationProgress() + tickDelta) * 2) / 1.9f) * (1.0f - ((float)entity.getAnimationProgress() / entity.animationLength)) : 0;
-                light = 15728864;
+                //System.out.println(light);
+                light = 15728866; //15728864;
                 pdetector1.roll = r;
                 pdetector2.roll = r;
                 pdetector3.roll = r;

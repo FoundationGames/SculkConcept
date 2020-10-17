@@ -57,7 +57,7 @@ public class SculkSensorBlockEntity extends BlockEntity implements Tickable, Blo
                 if(!world.isClient()) for(PlayerEntity player : world.getPlayers()) ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new PlaySoundS2CPacket(SoundEvents.ENTITY_STRIDER_AMBIENT, SoundCategory.BLOCKS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 1.0f, 1.0f));
                 //world.playSound(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, SoundEvents.ENTITY_STRIDER_AMBIENT, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
             } else {
-                if(!world.isClient()) for(PlayerEntity player : world.getPlayers()) ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new PlaySoundS2CPacket(SoundEvents.BLOCK_NETHER_WART_BREAK, SoundCategory.BLOCKS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 0.35f, 0.5f));
+                if(!world.isClient()) for(PlayerEntity player : world.getPlayers()) ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new PlaySoundS2CPacket(SoundEvents.BLOCK_NETHER_WART_BREAK, SoundCategory.BLOCKS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 0.35f, 0.1f));
             }
         }
     }
