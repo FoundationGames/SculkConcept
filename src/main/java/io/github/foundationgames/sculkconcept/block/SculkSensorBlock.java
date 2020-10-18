@@ -23,7 +23,7 @@ import net.minecraft.world.BlockView;
 
 import java.util.Random;
 
-public class SculkSensorBlock extends VibrationRecieverBlock implements BlockEntityProvider {
+public class SculkSensorBlock extends VibrationReceiverBlock implements BlockEntityProvider {
     public static final BooleanProperty POWERED = Properties.POWERED;
     public static final VoxelShape SHAPE = createCuboidShape(0, 0, 0, 16, 8, 16);
 
@@ -39,10 +39,11 @@ public class SculkSensorBlock extends VibrationRecieverBlock implements BlockEnt
 
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        world.setBlockState(pos, state.with(POWERED, !state.get(POWERED)));
+        /*world.setBlockState(pos, state.with(POWERED, !state.get(POWERED)));
         if(!state.get(POWERED)) {
             world.getBlockTickScheduler().schedule(pos, this, 30);
-        }
+        }*/
+        if(world.getBlockEntity(pos) instanceof SculkSensorBlockEntity) ((SculkSensorBlockEntity)world.getBlockEntity(pos)).vibrate();
     }
 
     @Override
@@ -61,13 +62,16 @@ public class SculkSensorBlock extends VibrationRecieverBlock implements BlockEnt
     }
 
     @Override
-    public void onVibrationRecieved(ServerWorld world, Vec3d vPos, BlockPos bpos, int radius) {
+    public void onVibrationReceived(ServerWorld world, Vec3d vPos, BlockPos bpos, int radius) {
         //if(world.isClient()) world.addParticle(new VibrationParticleEffect(vPos.x, vPos.y, vPos.z, pos.getX()+0.5D, pos.getY()+0.5D, pos.getZ()+0.5D, 4), vPos.x, vPos.y, vPos.z, 0, 0, 0);
         Vec3d pos = new Vec3d(bpos.getX()+0.5, bpos.getY()+0.5, bpos.getZ()+0.5);
         for(PlayerEntity player : world.getPlayers()) ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new ParticleS2CPacket(new VibrationParticleEffect(vPos.x, vPos.y, vPos.z, pos.getX(), pos.getY(), pos.getZ(), 4), true, vPos.x, vPos.y, vPos.z, 0f, 0f, 0f, 1f, 1));
-        if(!world.getBlockState(bpos).get(POWERED)) {
-            world.getBlockTickScheduler().schedule(bpos, this, SculkConcept.ticksOfDist(vPos, pos));
-        }
+        world.getBlockTickScheduler().schedule(bpos, this, SculkConcept.ticksOfDist(vPos, pos));
+    }
+
+    @Override
+    public void onOccludedVibrationReceived(ServerWorld world, Vec3d vPos, Vec3d wPos, BlockPos bpos, int radius) {
+        for(PlayerEntity player : world.getPlayers()) ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new ParticleS2CPacket(new VibrationParticleEffect(vPos.x, vPos.y, vPos.z, wPos.getX(), wPos.getY(), wPos.getZ(), 4), true, vPos.x, vPos.y, vPos.z, 0f, 0f, 0f, 1f, 1));
     }
 
     @Override

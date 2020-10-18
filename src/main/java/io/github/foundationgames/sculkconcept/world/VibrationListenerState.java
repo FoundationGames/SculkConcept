@@ -1,12 +1,15 @@
 package io.github.foundationgames.sculkconcept.world;
 
-import io.github.foundationgames.sculkconcept.block.VibrationRecieverBlock;
+import io.github.foundationgames.sculkconcept.Util.MathUtil;
+import io.github.foundationgames.sculkconcept.block.VibrationReceiverBlock;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.PersistentState;
+import net.minecraft.world.RaycastContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +53,13 @@ public class VibrationListenerState extends PersistentState {
         BlockPos.Mutable m = new BlockPos.Mutable();
         for(long l : positions) {
             m.set(l);
-            if(pos.squaredDistanceTo(m.getX(), m.getY(), m.getZ()) <= squaredRadius && world.getBlockState(m).getBlock() instanceof VibrationRecieverBlock) {
-                VibrationRecieverBlock reciever = (VibrationRecieverBlock)world.getBlockState(m).getBlock();
-                reciever.onVibrationRecieved(world, pos, m, squaredRadius);
+            Vec3d mvec = new Vec3d(m.getX()+0.5, m.getY()+0.5, m.getZ()+0.5);
+            if(pos.squaredDistanceTo(mvec) <= squaredRadius && world.getBlockState(m).getBlock() instanceof VibrationReceiverBlock) {
+                VibrationReceiverBlock reciever = (VibrationReceiverBlock)world.getBlockState(m).getBlock();
+                Vec3d wpos = MathUtil.getWoolPos(world, pos, mvec, 0);
+                if(wpos == null) reciever.onVibrationReceived(world, pos, m, squaredRadius);
+                else reciever.onOccludedVibrationReceived(world, pos, wpos, m, squaredRadius);
+                //BlockHitResult h = world.raycastBlock(pos, new Vec3d(m.getX()+0.5, m.getY()+0.5, m.getZ()+0.5), m.toImmutable(), VoxelShapes.UNBOUNDED, world.getBlockState(m.toImmutable()));
             }
         }
     }

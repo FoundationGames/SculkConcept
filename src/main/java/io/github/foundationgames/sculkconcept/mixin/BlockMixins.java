@@ -31,9 +31,8 @@ public class BlockMixins {
 
     @Mixin(BlockItem.class)
     public static class BlockItemMixin {
-        @Inject(method = "useOnBlock", at = @At("TAIL"))
-        public void vibratePlacement(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
-            ItemPlacementContext ctx = new ItemPlacementContext(context);
+        @Inject(method = "place(Lnet/minecraft/item/ItemPlacementContext;)Lnet/minecraft/util/ActionResult;", at = @At("HEAD"))
+        public void vibratePlacement(ItemPlacementContext ctx, CallbackInfoReturnable<ActionResult> cir) {
             if(ctx.canPlace() && !ctx.getWorld().isClient()) VibrationListenerState.get((ServerWorld)ctx.getWorld()).createVibration(new Vec3d(ctx.getBlockPos().getX()+0.5, ctx.getBlockPos().getY()+0.5, ctx.getBlockPos().getZ()+0.5), 100);
         }
     }

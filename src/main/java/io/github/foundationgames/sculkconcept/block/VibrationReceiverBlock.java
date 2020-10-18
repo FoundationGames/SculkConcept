@@ -8,12 +8,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public abstract class VibrationRecieverBlock extends Block {
-    public VibrationRecieverBlock(Settings settings) {
+public abstract class VibrationReceiverBlock extends Block {
+    public VibrationReceiverBlock(Settings settings) {
         super(settings);
     }
 
-    public abstract void onVibrationRecieved(ServerWorld world, Vec3d vibrationPos, BlockPos pos, int radius);
+    public abstract void onVibrationReceived(ServerWorld world, Vec3d vibrationPos, BlockPos pos, int radius);
+    public abstract void onOccludedVibrationReceived(ServerWorld world, Vec3d vibrationPos, Vec3d occlusionPos, BlockPos pos, int radius);
 
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {

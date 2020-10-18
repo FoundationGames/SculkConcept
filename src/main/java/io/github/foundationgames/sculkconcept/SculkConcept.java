@@ -3,6 +3,7 @@ package io.github.foundationgames.sculkconcept;
 import io.github.foundationgames.sculkconcept.block.ParticleTestBlock;
 import io.github.foundationgames.sculkconcept.block.SculkSensorBlock;
 import io.github.foundationgames.sculkconcept.block.entity.SculkSensorBlockEntity;
+import io.github.foundationgames.sculkconcept.callback.BlockCallbacks;
 import io.github.foundationgames.sculkconcept.world.VibrationListenerState;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
@@ -32,16 +33,7 @@ public class SculkConcept implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
-            if(!world.isClient()) {
-                VibrationListenerState.get((ServerWorld)world).createVibration(new Vec3d(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5), 100);
-            }
-        });
-        /*UseBlockCallback.EVENT.register((playerEntity, world, hand, blockHitResult) -> {
-            BlockPos pos = blockHitResult.getBlockPos();
-            if(!world.isClient()) VibrationListenerState.get((ServerWorld)world).createVibration(new Vec3d(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5), 100);
-            return ActionResult.PASS;
-        });*/
+        BlockCallbacks.init();
         Registry.register(Registry.ITEM, id("sculk_sensor"), new BlockItem(SCULK_SENSOR, new Item.Settings().group(ItemGroup.REDSTONE)));
     }
 
