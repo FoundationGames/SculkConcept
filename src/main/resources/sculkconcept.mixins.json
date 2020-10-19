@@ -5,10 +5,11 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BlockMixins$BlockItemMixin",
+    "BlockMixins$PistonBlockEntityMixin",
     "BlockMixins$WorldMixin",
     "EntityMixins$LivingEntityMixin",
     "EntityMixins$ProjectileEntityMixin",
-    "EntityMixins$ServerPlayerEntityMixin"
+    "EntityMixins$ServerPlayNetworkHandlerMixin"
   ],
   "client": [
   ],

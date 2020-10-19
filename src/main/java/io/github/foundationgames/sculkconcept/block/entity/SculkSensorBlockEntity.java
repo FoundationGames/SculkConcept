@@ -17,7 +17,7 @@ import net.minecraft.util.Tickable;
 public class SculkSensorBlockEntity extends BlockEntity implements Tickable, BlockEntityClientSerializable {
     private boolean powered = false;
     private int powerTime = 0;
-    private int invTime = 0;
+    private int invTime = 2;
     private int animationProgress = 0;
     public final int animationLength;
     public final int maxPowerTime;

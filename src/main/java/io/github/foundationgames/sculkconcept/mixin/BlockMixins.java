@@ -3,8 +3,11 @@ package io.github.foundationgames.sculkconcept.mixin;
 import io.github.foundationgames.sculkconcept.callback.BlockCallbacks;
 import io.github.foundationgames.sculkconcept.world.VibrationListenerState;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.PistonBlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
@@ -15,6 +18,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class BlockMixins {
@@ -31,9 +35,19 @@ public class BlockMixins {
 
     @Mixin(BlockItem.class)
     public static class BlockItemMixin {
-        @Inject(method = "place(Lnet/minecraft/item/ItemPlacementContext;)Lnet/minecraft/util/ActionResult;", at = @At("HEAD"))
-        public void vibratePlacement(ItemPlacementContext ctx, CallbackInfoReturnable<ActionResult> cir) {
-            if(ctx.canPlace() && !ctx.getWorld().isClient()) VibrationListenerState.get((ServerWorld)ctx.getWorld()).createVibration(new Vec3d(ctx.getBlockPos().getX()+0.5, ctx.getBlockPos().getY()+0.5, ctx.getBlockPos().getZ()+0.5), 100);
+        @Inject(method = "postPlacement", at = @At("HEAD"))
+        public void vibratePlacement(BlockPos pos, World world, PlayerEntity player, ItemStack stack, BlockState state, CallbackInfoReturnable<Boolean> cir) {
+            if(!world.isClient()) VibrationListenerState.get((ServerWorld)world).createVibration(new Vec3d(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5), 100);
+        }
+    }
+
+    @Mixin(PistonBlockEntity.class)
+    public static class PistonBlockEntityMixin {
+        @Inject(method = "finish", at = @At("HEAD"))
+        public void vibratePush(CallbackInfo ci) {
+            World world = ((PistonBlockEntity)(Object)this).getWorld();
+            BlockPos pos = ((PistonBlockEntity)(Object)this).getPos();
+            if(!world.isClient()) VibrationListenerState.get((ServerWorld)world).createVibration(new Vec3d(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5), 100);
         }
     }
 }

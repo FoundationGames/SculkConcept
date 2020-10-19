@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -18,7 +19,7 @@ import java.util.List;
 public class BlockCallbacks {
     public static void init() {
         PlayerBlockBreakEvents.AFTER.register((world, player, pos, state, blockEntity) -> {
-            vibration(world, pos, 100);
+            if(!state.getBlock().isIn(BlockTags.WOOL)) vibration(world, pos, 100);
         });
         UseBlockCallback.EVENT.register((player, world, hand, hit) -> {
             BlockPos pos = hit.getBlockPos();
@@ -40,7 +41,7 @@ public class BlockCallbacks {
         cases.add(oldState.getBlock() instanceof LeverBlock && newState.getBlock() instanceof LeverBlock);
         cases.add(oldState.getBlock() instanceof AbstractButtonBlock && newState.getBlock() instanceof AbstractButtonBlock);
         cases.add(oldState.getBlock() instanceof AbstractPressurePlateBlock && newState.getBlock() instanceof AbstractPressurePlateBlock);
-        cases.add(oldState.getBlock() instanceof PistonBlock && newState.getBlock() instanceof PistonBlock);
+        //cases.add(oldState.getBlock() instanceof PistonBlock && newState.getBlock() instanceof PistonBlock);
         cases.add(oldState.getBlock() instanceof FenceGateBlock && newState.getBlock() instanceof FenceGateBlock);
 
         for(boolean c : cases) {
