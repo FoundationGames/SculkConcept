@@ -14,6 +14,8 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Tickable;
 
+import java.util.Random;
+
 public class SculkSensorBlockEntity extends BlockEntity implements Tickable, BlockEntityClientSerializable {
     private boolean powered = false;
     private int powerTime = 0;
@@ -26,8 +28,8 @@ public class SculkSensorBlockEntity extends BlockEntity implements Tickable, Blo
     public SculkSensorBlockEntity() {
         super(SculkConcept.SCULK_SENSOR_ENTITY);
         animationLength = 15;
-        maxPowerTime = 30;
-        maxInvTime = 32;
+        maxPowerTime = 35;
+        maxInvTime = maxPowerTime + 2;
     }
 
     public int getAnimationProgress() {
@@ -77,7 +79,7 @@ public class SculkSensorBlockEntity extends BlockEntity implements Tickable, Blo
             animationProgress = animationLength;
             invTime = maxInvTime;
             this.powered = true;
-            if(!world.isClient()) for(PlayerEntity player : world.getPlayers()) ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new PlaySoundS2CPacket(SoundEvents.ENTITY_STRIDER_AMBIENT, SoundCategory.BLOCKS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 1.0f, 1.0f));
+            if(!world.isClient()) for(PlayerEntity player : world.getPlayers()) ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new PlaySoundS2CPacket(SculkConcept.SCULK_SENSOR_TRILL, SoundCategory.BLOCKS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 1.0f, 1.0f + ((new Random().nextFloat() * 0.3f) - 0.15f)));
         }
     }
 

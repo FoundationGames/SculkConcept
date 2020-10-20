@@ -8,6 +8,7 @@
     "BlockMixins$PistonBlockEntityMixin",
     "BlockMixins$WorldMixin",
     "EntityMixins$LivingEntityMixin",
+    "EntityMixins$PersistentProjectileEntityMixin",
     "EntityMixins$ProjectileEntityMixin",
     "EntityMixins$ServerPlayNetworkHandlerMixin"
   ],

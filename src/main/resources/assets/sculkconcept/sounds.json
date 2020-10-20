@@ -1,0 +1,8 @@
+{
+  "sculk_sensor_trill": {
+    "subtitle": "subtitles.sculkconcept.sculk_sensor_trill",
+    "sounds": [
+      "sculkconcept:sculk_sensor/sculk_sensor_trill_0"
+    ]
+  }
+}

@@ -2,11 +2,14 @@ package io.github.foundationgames.sculkconcept.mixin;
 
 import io.github.foundationgames.sculkconcept.world.VibrationListenerState;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -58,6 +61,29 @@ public class EntityMixins {
     public static class ProjectileEntityMixin {
         @Inject(method = "onCollision", at = @At("TAIL"))
         public void vibration(HitResult hitResult, CallbackInfo ci) {
+            if(!((ProjectileEntity)(Object)this instanceof PersistentProjectileEntity)) {
+                World world = ((ProjectileEntity)(Object)this).world;
+                Vec3d pos = ((ProjectileEntity)(Object)this).getPos();
+                if(!world.isClient()) {
+                    VibrationListenerState.get((ServerWorld)world).createVibration(new Vec3d(pos.getX(), pos.getY(), pos.getZ()), 69);
+                }
+            }
+        }
+    }
+
+    @Mixin(PersistentProjectileEntity.class)
+    public static class PersistentProjectileEntityMixin {
+        @Inject(method = "onBlockHit", at = @At("TAIL"))
+        public void blockVibration(BlockHitResult blockHitResult, CallbackInfo ci) {
+            World world = ((ProjectileEntity)(Object)this).world;
+            Vec3d pos = ((ProjectileEntity)(Object)this).getPos();
+            if(!world.isClient()) {
+                VibrationListenerState.get((ServerWorld)world).createVibration(new Vec3d(pos.getX(), pos.getY(), pos.getZ()), 69);
+            }
+        }
+
+        @Inject(method = "onEntityHit", at = @At("TAIL"))
+        public void entityVibration(EntityHitResult entityHitResult, CallbackInfo ci) {
             World world = ((ProjectileEntity)(Object)this).world;
             Vec3d pos = ((ProjectileEntity)(Object)this).getPos();
             if(!world.isClient()) {
