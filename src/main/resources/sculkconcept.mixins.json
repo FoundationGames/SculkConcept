@@ -4,13 +4,15 @@
   "package": "io.github.foundationgames.sculkconcept.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "BlockMixins$BellBlockMixin",
     "BlockMixins$BlockItemMixin",
-    "BlockMixins$PistonBlockEntityMixin",
+    "BlockMixins$ExplosionMixin",
+    "BlockMixins$PistonBlockMixin",
     "BlockMixins$WorldMixin",
+    "EntityMixins$LightningEntityMixin",
     "EntityMixins$LivingEntityMixin",
     "EntityMixins$PersistentProjectileEntityMixin",
-    "EntityMixins$ProjectileEntityMixin",
-    "EntityMixins$ServerPlayNetworkHandlerMixin"
+    "EntityMixins$ProjectileEntityMixin"
   ],
   "client": [
   ],
