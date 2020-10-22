@@ -2,6 +2,7 @@ package io.github.foundationgames.sculkconcept.mixin;
 
 import io.github.foundationgames.sculkconcept.callback.BlockCallbacks;
 import io.github.foundationgames.sculkconcept.world.VibrationListenerState;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.BellBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.PistonBlock;

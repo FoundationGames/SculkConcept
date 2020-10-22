@@ -6,6 +6,7 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
@@ -15,6 +16,8 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
+
+import java.util.Random;
 
 public class CandleBlock extends Block {
     public static final VoxelShape ONE_SHAPE = createCuboidShape(6, 0, 6, 10, 8, 10);
@@ -31,8 +34,14 @@ public class CandleBlock extends Block {
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         BlockState state = ctx.getWorld().getBlockState(ctx.getBlockPos());
-        if(state.isOf(this)) return getDefaultState().with(COUNT, Math.min(state.get(COUNT), 4));
+        if(state.isOf(this)) return getDefaultState().with(COUNT, Math.min(state.get(COUNT)+1, 4));
         return super.getPlacementState(ctx);
+    }
+
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+        super.onPlaced(world, pos, state, placer, itemStack);
+        if(world.isClient()) this.randomDisplayTick(state, world, pos, new Random());
     }
 
     @Override
@@ -43,6 +52,30 @@ public class CandleBlock extends Block {
     @Override
     public boolean canReplace(BlockState state, ItemPlacementContext ctx) {
         return ctx.getStack().getItem() == this.asItem() && state.get(COUNT) < 4;
+    }
+
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        super.randomDisplayTick(state, world, pos, random);
+        if(state.get(COUNT) == 1) {
+            flame(world, pos, 8, 7, 8);
+        } else if(state.get(COUNT) == 2) {
+            flame(world, pos, 7, 8, 6);
+            flame(world, pos, 9, 7, 10);
+        } else if(state.get(COUNT) == 3) {
+            flame(world, pos, 7, 8, 7);
+            flame(world, pos, 8, 7, 10);
+            flame(world, pos, 10, 5, 8);
+        } else if(state.get(COUNT) == 4) {
+            flame(world, pos, 7, 8, 7);
+            flame(world, pos, 7, 7, 10);
+            flame(world, pos, 10, 5, 9);
+            flame(world, pos, 10, 7, 6);
+        }
+    }
+
+    private void flame(World world, BlockPos pos, int x, int y, int z) {
+        world.addParticle(ParticleTypes.FLAME, pos.getX() + ((float)x / 16), pos.getY() + ((float)y / 16) /*- 0.03125f*/, pos.getZ() + ((float)z / 16), 0.0D, 0.0D, 0.0D);
     }
 
     @Override

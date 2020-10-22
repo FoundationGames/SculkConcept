@@ -19,6 +19,10 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+	//I dont wanna make the candle models and blockstates manually
+	modImplementation "com.lettuce.fudge:artifice:0.13.2+1.16.3"
+	include "com.lettuce.fudge:artifice:0.13.2+1.16.3"
+
 	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
 	// You may need to force-disable transitiveness on them.
 }

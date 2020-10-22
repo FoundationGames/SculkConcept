@@ -75,7 +75,7 @@ public class VibrationParticle extends SpriteBillboardParticle {
         matrices.translate(pos.x - camera.getPos().x, pos.y - camera.getPos().y, pos.z - camera.getPos().z);
         //matrices.translate(pos.getX(), pos.getY(), pos.getZ());
 
-        matrices.scale(1f/14, 1f/14, 1f/14);
+        matrices.scale(1f/15, 1f/15, 1f/15);
         int a = (dir.getX() < 0 ? 90 : -90);
         matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180));
         matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(yaw + a));

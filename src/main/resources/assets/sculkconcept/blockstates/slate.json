@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "sculkconcept:block/slate"
+      },
+      {
+        "model": "sculkconcept:block/slate_mirrored"
+      },
+      {
+        "model": "sculkconcept:block/slate",
+        "y": 180
+      },
+      {
+        "model": "sculkconcept:block/slate_mirrored",
+        "y": 180
+      }
+    ]
+  }
+}

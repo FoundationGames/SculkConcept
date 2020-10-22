@@ -1,5 +1,6 @@
 package io.github.foundationgames.sculkconcept;
 
+import io.github.foundationgames.sculkconcept.block.CandleBlock;
 import io.github.foundationgames.sculkconcept.block.SculkGrowthBlock;
 import io.github.foundationgames.sculkconcept.block.SculkSensorBlock;
 import io.github.foundationgames.sculkconcept.block.SculkSourceBlock;
@@ -25,6 +26,26 @@ public class SculkConcept implements ModInitializer {
     public static final Block SCULK_GROWTH = register("sculk_growth", new SculkGrowthBlock(FabricBlockSettings.copy(Blocks.GRASS).sounds(BlockSoundGroup.NETHER_WART)), ItemGroup.DECORATIONS);
     public static final Block SCULK_GROWTH_BLOCK = register("sculk_growth_block", new Block(FabricBlockSettings.copy(Blocks.STONE).sounds(BlockSoundGroup.CORAL)), ItemGroup.DECORATIONS);
     public static final Block SCULK_SOURCE = register("sculk_source", new SculkSourceBlock(FabricBlockSettings.copy(Blocks.STONE)), ItemGroup.DECORATIONS);
+
+    public static final Block SLATE = register("slate", new Block(FabricBlockSettings.copy(Blocks.STONE)), ItemGroup.BUILDING_BLOCKS);
+
+    public static final Block WHITE_CANDLE = register("white_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block RED_CANDLE = register("red_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block ORANGE_CANDLE = register("orange_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block YELLOW_CANDLE = register("yellow_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block LIME_CANDLE = register("lime_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block GREEN_CANDLE = register("green_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block BLUE_CANDLE = register("blue_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block CYAN_CANDLE = register("cyan_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block LIGHT_BLUE_CANDLE = register("light_blue_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block PINK_CANDLE = register("pink_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block MAGENTA_CANDLE = register("magenta_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block PURPLE_CANDLE = register("purple_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block BROWN_CANDLE = register("brown_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block BLACK_CANDLE = register("black_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block GRAY_CANDLE = register("gray_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+    public static final Block LIGHT_GRAY_CANDLE = register("light_gray_candle", new CandleBlock(FabricBlockSettings.copy(Blocks.TORCH).lightLevel(state -> 6 + state.get(CandleBlock.COUNT) * 2)), ItemGroup.DECORATIONS);
+
 
     public static SoundEvent SCULK_SENSOR_TRILL = Registry.register(Registry.SOUND_EVENT, id("sculk_sensor_trill"), new SoundEvent(id("sculk_sensor_trill")));
 
