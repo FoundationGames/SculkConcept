@@ -7,12 +7,14 @@ import net.minecraft.block.BellBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.PistonBlock;
 import net.minecraft.block.entity.PistonBlockEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -31,11 +33,17 @@ public class BlockMixins {
     @Mixin(World.class)
     public static abstract class WorldMixin {
         @Shadow public abstract BlockState getBlockState(BlockPos pos);
+        @Shadow public abstract boolean isClient();
 
         @Inject(method = "setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;II)Z", at = @At("HEAD"))
         public void vibrateBlocks(BlockPos pos, BlockState state, int flags, int maxUpdateDepth, CallbackInfoReturnable<Boolean> cir) {
             BlockState old = this.getBlockState(pos);
             BlockCallbacks.blockStateChanged((World)(Object)this, old, state, pos);
+        }
+
+        @Inject(method = "breakBlock", at = @At("HEAD"))
+        public void vibrateBreak(BlockPos pos, boolean drop, Entity breakingEntity, int maxUpdateDepth, CallbackInfoReturnable<Boolean> cir) {
+            if(!this.getBlockState(pos).isAir() && !this.getBlockState(pos).getBlock().isIn(BlockTags.WOOL) && !this.isClient()) VibrationListenerState.get((ServerWorld)(Object)this).createVibration(new Vec3d(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5), 100);
         }
     }
 

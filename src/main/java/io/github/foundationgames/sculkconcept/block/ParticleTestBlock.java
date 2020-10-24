@@ -4,6 +4,7 @@ import io.github.foundationgames.sculkconcept.particle.VibrationParticleEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -21,6 +22,7 @@ public class ParticleTestBlock extends Block {
         if(world.isClient()) {
             world.addParticle(new VibrationParticleEffect(pos.getX()+0.5D, pos.getY()+0.5D, pos.getZ()+0.5D, player.getX(), player.getY(), player.getZ(), 4), pos.getX()+0.5D, pos.getY()+0.5D, pos.getZ()+0.5D, 0, 0, 0);
         }
+        world.spawnEntity(new FallingBlockEntity(world, pos.getX()+0.5D, pos.getY()+0.5D, pos.getZ()+0.5D, world.getBlockState(pos)));
         return ActionResult.SUCCESS;
     }
 

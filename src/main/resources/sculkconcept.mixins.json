@@ -9,6 +9,8 @@
     "BlockMixins$ExplosionMixin",
     "BlockMixins$PistonBlockMixin",
     "BlockMixins$WorldMixin",
+    "EntityMixins$AbstractMinecartEntityMixin",
+    "EntityMixins$BoatEntityMixin",
     "EntityMixins$LightningEntityMixin",
     "EntityMixins$LivingEntityMixin",
     "EntityMixins$PersistentProjectileEntityMixin",

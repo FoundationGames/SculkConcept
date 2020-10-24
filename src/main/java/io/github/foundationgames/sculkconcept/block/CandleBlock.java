@@ -11,6 +11,7 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
@@ -75,7 +76,7 @@ public class CandleBlock extends Block {
     }
 
     private void flame(World world, BlockPos pos, int x, int y, int z) {
-        world.addParticle(ParticleTypes.FLAME, pos.getX() + ((float)x / 16), pos.getY() + ((float)y / 16) /*- 0.03125f*/, pos.getZ() + ((float)z / 16), 0.0D, 0.0D, 0.0D);
+        world.addParticle(ParticleTypes.FLAME, pos.getX() + ((float)x / 16), pos.getY() + ((float)y / 16), pos.getZ() + ((float)z / 16), 0.0D, 0.0D, 0.0D);
     }
 
     @Override

@@ -1,15 +1,12 @@
 package io.github.foundationgames.sculkconcept.world;
 
-import io.github.foundationgames.sculkconcept.Util.MathUtil;
+import io.github.foundationgames.sculkconcept.util.MathUtil;
 import io.github.foundationgames.sculkconcept.block.VibrationReceiverBlock;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.PersistentState;
-import net.minecraft.world.RaycastContext;
 
 import java.util.ArrayList;
 import java.util.List;

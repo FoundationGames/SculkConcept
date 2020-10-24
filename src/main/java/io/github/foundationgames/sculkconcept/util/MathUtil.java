@@ -1,19 +1,10 @@
-package io.github.foundationgames.sculkconcept.Util;
+package io.github.foundationgames.sculkconcept.util;
 
-import io.github.foundationgames.sculkconcept.particle.VibrationParticleEffect;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
-import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class MathUtil {
     public static Vec3i v3dTov3i(Vec3d vec) {
@@ -32,5 +23,9 @@ public class MathUtil {
             if(world.getBlockState(p).getBlock().isIn(BlockTags.WOOL)) return apos;
         }
         return null;
+    }
+
+    public static boolean nearZero(double number, double precision) {
+        return (number < Math.abs(precision) && number > -Math.abs(precision));
     }
 }

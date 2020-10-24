@@ -1,11 +1,15 @@
 package io.github.foundationgames.sculkconcept.mixin;
 
+import io.github.foundationgames.sculkconcept.util.MathUtil;
 import io.github.foundationgames.sculkconcept.world.VibrationListenerState;
+import net.minecraft.block.RailBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -110,6 +114,75 @@ public class EntityMixins {
             Vec3d pos = ((LightningEntity)(Object)this).getPos();
             if(!world.isClient()) {
                 VibrationListenerState.get((ServerWorld)world).createVibration(new Vec3d(pos.getX(), pos.getY(), pos.getZ()), 220);
+            }
+        }
+    }
+
+    @Mixin(AbstractMinecartEntity.class)
+    public static class AbstractMinecartEntityMixin {
+        private boolean wasGrounded = false;
+        private int moveTick = 0;
+
+        @Inject(method = "tick", at = @At("HEAD"))
+        public void vibrateMinecartMove(CallbackInfo ci) {
+            AbstractMinecartEntity self = ((AbstractMinecartEntity)(Object)this);
+            boolean ground = (self.isOnGround() || self.world.getBlockState(self.getBlockPos()).getBlock() instanceof RailBlock);
+            if(this.wasGrounded != ground) {
+                if(ground) {
+                    vibration(88);
+                }
+            }
+            Vec3d vel = self.getVelocity();
+            if(!MathUtil.nearZero(vel.getX(), 0.02) && !MathUtil.nearZero(vel.getZ(), 0.02) && ground) {
+                moveTick++;
+                if(moveTick > 4) {
+                    moveTick = 0;
+                    vibration(76);
+                }
+            }
+            this.wasGrounded = ground;
+        }
+
+        private void vibration(int radius) {
+            World world = ((AbstractMinecartEntity)(Object)this).getEntityWorld();
+            Vec3d pos = ((AbstractMinecartEntity)(Object)this).getPos();
+            if(!world.isClient()) {
+                VibrationListenerState.get((ServerWorld)world).createVibration(new Vec3d(pos.getX(), pos.getY(), pos.getZ()), radius);
+            }
+        }
+    }
+
+    @Mixin(BoatEntity.class)
+    public static class BoatEntityMixin {
+        private boolean wasGrounded = false;
+        private int moveTick = 0;
+        private Vec3d lastPos = ((BoatEntity)(Object)this).getPos();
+
+        @Inject(method = "tick", at = @At("HEAD"))
+        public void vibrateBoatMove(CallbackInfo ci) {
+            if(this.wasGrounded != ((BoatEntity)(Object)this).isOnGround()) {
+                if(((BoatEntity)(Object)this).isOnGround()) {
+                    vibration(88);
+                }
+            }
+            Vec3d vel = ((BoatEntity)(Object)this).getVelocity();
+            if(!((BoatEntity)(Object)this).world.isClient()) vel = lastPos.subtract(((BoatEntity)(Object)this).getPos());
+            if(vel.getX() != 0 && vel.getZ() != 0) {
+                moveTick++;
+                if(moveTick > 9) {
+                    moveTick = 0;
+                    vibration(69);
+                }
+            }
+            this.wasGrounded = ((BoatEntity)(Object)this).isOnGround();
+            this.lastPos = ((BoatEntity)(Object)this).getPos();
+        }
+
+        private void vibration(int radius) {
+            World world = ((BoatEntity)(Object)this).getEntityWorld();
+            Vec3d pos = ((BoatEntity)(Object)this).getPos();
+            if(!world.isClient()) {
+                VibrationListenerState.get((ServerWorld)world).createVibration(new Vec3d(pos.getX(), pos.getY(), pos.getZ()), radius);
             }
         }
     }
