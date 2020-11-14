@@ -14,7 +14,8 @@
     "EntityMixins$LightningEntityMixin",
     "EntityMixins$LivingEntityMixin",
     "EntityMixins$PersistentProjectileEntityMixin",
-    "EntityMixins$ProjectileEntityMixin"
+    "EntityMixins$ProjectileEntityMixin",
+    "EntityMixins$ServerPlayerEntityMixin"
   ],
   "client": [
   ],

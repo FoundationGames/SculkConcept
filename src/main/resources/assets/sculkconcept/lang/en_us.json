@@ -20,5 +20,6 @@
 	"block.sculkconcept.gray_candle": "Gray Candle",
 	"block.sculkconcept.light_gray_candle": "Light Gray Candle",
 	"block.sculkconcept.white_candle": "White Candle",
-	"subtitles.sculkconcept.sculk_sensor_trill": "Sculk Sensor trills"
+	"subtitles.sculkconcept.sculk_sensor_trill": "Sculk Sensor trills",
+	"subtitles.sculkconcept.sculk_sensor_rest": "Sculk Sensor rests"
 }

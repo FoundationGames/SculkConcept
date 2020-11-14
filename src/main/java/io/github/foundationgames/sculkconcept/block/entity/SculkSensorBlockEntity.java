@@ -9,10 +9,14 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
+import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Tickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.Random;
 
@@ -24,6 +28,8 @@ public class SculkSensorBlockEntity extends BlockEntity implements Tickable, Blo
     public final int animationLength;
     public final int maxPowerTime;
     public final int maxInvTime;
+
+    private final Random RAND = new Random();
 
     public SculkSensorBlockEntity() {
         super(SculkConcept.SCULK_SENSOR_ENTITY);
@@ -66,7 +72,7 @@ public class SculkSensorBlockEntity extends BlockEntity implements Tickable, Blo
         if(invTime > 0) invTime--;
         if(powered && powerTime <= 0) {
             powered = false;
-            if(!world.isClient()) for(PlayerEntity player : world.getPlayers()) ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new PlaySoundS2CPacket(SoundEvents.BLOCK_NETHER_WART_BREAK, SoundCategory.BLOCKS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 0.35f, 0.1f));
+            if(!world.isClient()) for(PlayerEntity player : world.getPlayers()) ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new PlaySoundS2CPacket(SculkConcept.SCULK_SENSOR_REST, SoundCategory.BLOCKS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 1.2f, 1.0f + (RAND.nextFloat() * 0.25f) - 0.125f));
         }
         if(world.getBlockState(pos).get(SculkSensorBlock.POWERED) != powered) {
             world.setBlockState(pos, world.getBlockState(pos).with(SculkSensorBlock.POWERED, powered));
@@ -79,7 +85,7 @@ public class SculkSensorBlockEntity extends BlockEntity implements Tickable, Blo
             animationProgress = animationLength;
             invTime = maxInvTime;
             this.powered = true;
-            if(!world.isClient()) for(PlayerEntity player : world.getPlayers()) ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new PlaySoundS2CPacket(SculkConcept.SCULK_SENSOR_TRILL, SoundCategory.BLOCKS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 1.0f, 1.0f + ((new Random().nextFloat() * 0.3f) - 0.15f)));
+            if(!world.isClient()) for(PlayerEntity player : world.getPlayers()) ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new PlaySoundS2CPacket(SculkConcept.SCULK_SENSOR_TRILL, SoundCategory.BLOCKS, pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5, 1.0f, 0.85f + RAND.nextFloat() * 0.35f));
         }
     }
 

@@ -6,6 +6,7 @@ import io.github.foundationgames.sculkconcept.block.SculkSensorBlock;
 import io.github.foundationgames.sculkconcept.block.SculkSourceBlock;
 import io.github.foundationgames.sculkconcept.block.entity.SculkSensorBlockEntity;
 import io.github.foundationgames.sculkconcept.callback.BlockCallbacks;
+import io.github.foundationgames.sculkconcept.callback.ItemCallbacks;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -48,12 +49,14 @@ public class SculkConcept implements ModInitializer {
 
 
     public static SoundEvent SCULK_SENSOR_TRILL = Registry.register(Registry.SOUND_EVENT, id("sculk_sensor_trill"), new SoundEvent(id("sculk_sensor_trill")));
+    public static SoundEvent SCULK_SENSOR_REST = Registry.register(Registry.SOUND_EVENT, id("sculk_sensor_rest"), new SoundEvent(id("sculk_sensor_rest")));
 
     public static final BlockEntityType<SculkSensorBlockEntity> SCULK_SENSOR_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, id("sculk_sensor"), BlockEntityType.Builder.create(SculkSensorBlockEntity::new, SCULK_SENSOR).build(null));
 
     @Override
     public void onInitialize() {
         BlockCallbacks.init();
+        ItemCallbacks.init();
         //Registry.register(Registry.ITEM, id("sculk_sensor"), new BlockItem(SCULK_SENSOR, new Item.Settings().group(ItemGroup.REDSTONE)));
     }
 
@@ -61,7 +64,7 @@ public class SculkConcept implements ModInitializer {
         return new Identifier("sculkconcept", path);
     }
     public static int ticksOfDist(Vec3d start, Vec3d end) {
-        return (int)(start.distanceTo(end) * 1.73);
+        return (int)(start.distanceTo(end) * 1.82);
     }
 
     private static Block register(String name, Block block, ItemGroup group) {

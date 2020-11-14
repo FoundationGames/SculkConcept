@@ -24,6 +24,7 @@ public class VibrationParticle extends SpriteBillboardParticle {
     private final int duration;
     private int stage;
     private final int stages;
+    private final double dist;
 
     public VibrationParticle(ClientWorld clientWorld, Vec3d start, Vec3d end, int stages) {
         super(clientWorld, start.getX(), start.getY(), start.getZ());
@@ -33,6 +34,7 @@ public class VibrationParticle extends SpriteBillboardParticle {
         this.stages = Math.min(4, Math.max(stages, 1));
         this.duration = SculkConcept.ticksOfDist(start, end);
         this.maxAge = duration;
+        this.dist = start.distanceTo(end);
     }
 
     @Override
@@ -54,7 +56,6 @@ public class VibrationParticle extends SpriteBillboardParticle {
         this.z = pos.getZ();
 
         this.stage = 5 - Math.round(delta((float) progress / duration) * stages);
-
     }
 
     @Override
@@ -63,37 +64,33 @@ public class VibrationParticle extends SpriteBillboardParticle {
         float yaw = (float)Math.toDegrees(Math.atan(dir.getZ() / dir.getX()));
         //float pitch = (float)Math.toDegrees(Math.atan(dir.getY() / dir.getX()));
         float prog = ((progress + tickDelta) / duration);
-        float dlt = delta(prog);
         Vec3d pos = position(prog);
-        float tilt = (dlt - 0.5f) * 64;
-
+        float tilt = (delta(pos) - 0.5f) * 64;
+        boolean below = camera.getPos().subtract(pos).y < 0;
 
         MatrixStack matrices = new MatrixStack();
 
         matrices.push();
 
         matrices.translate(pos.x - camera.getPos().x, pos.y - camera.getPos().y, pos.z - camera.getPos().z);
-        //matrices.translate(pos.getX(), pos.getY(), pos.getZ());
-
-        matrices.scale(1f/15, 1f/15, 1f/15);
+        matrices.scale(1f/18f, 1f/18f, 1f/18f);
         int a = (dir.getX() < 0 ? 90 : -90);
         matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180));
         matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(yaw + a));
         matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(tilt));
-        //matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-pitch));
-        matrices.translate(-8, 0, -1.5);
+        matrices.translate(-8, 0, -8);
 
         VertexConsumerProvider.Immediate i = MinecraftClient.getInstance().getBufferBuilders().getEffectVertexConsumers();
-        //VertexConsumer consumer = i.getBuffer(RenderLayer.getEntityCutout(SculkConcept.id("textures/particle/vibration_particle.png")));
-        VertexConsumer consumer = i.getBuffer(RenderLayer.getBeaconBeam(SculkConcept.id("textures/particle/vibration_particle.png"), true));
+        VertexConsumer consumer = i.getBuffer(RenderLayer.getBeaconBeam(SculkConcept.id("textures/particle/vibration_particle_stages.png"), true));
 
-        //position(progressTicks+tickDelta)
-        flatQuad(consumer, matrices, new Vec3d(0, 0, 0), 16, 3, 0, (Math.min(4, stage) - 1) * 3, 16, 3, 16, 16);
-        matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180));
-        matrices.translate(-16, 0, -3);
-        flatQuad(consumer, matrices, new Vec3d(0, 0, 0), 16, 3, 0, (Math.min(4, stage) - 1) * 3, 16, 3, 16, 16);
-        // ...
+        int u = (Math.min(3, stage - 1)) * 16;
+        if(below) {
+            matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(180));
+            matrices.translate(-16, 0, -3);
+        }
+        flatQuad(consumer, matrices, new Vec3d(0, 0, 0), 16, 16, 48 - u, 0, 16, 16, 48, 16);
         i.draw();
+
         matrices.pop();
     }
 
@@ -105,24 +102,14 @@ public class VibrationParticle extends SpriteBillboardParticle {
     }
 
     private float delta(float ticks) {
-        double d1 = start.distanceTo(end);
         double d2 = start.distanceTo(position(ticks));
-        return (float) (d2 / d1);
+        return (float) (d2 / dist);
     }
 
-    private float speed() { return 1f; }
-
-    /*private static void drawTexture(Identifier texture, VertexConsumer buffer, MatrixStack matrices, int light, int overlay, float r, float g, float b, float a, int x, int y, int u, int v, int width, int height, int texWidth, int texHeight) {
-        float u0 = (float)u / (float)texWidth;
-        float u1 = ((float)u + (float)width) / (float)texWidth;
-        float v0 = (float)v / (float)texHeight;
-        float v1 = ((float)v + (float)height) / (float)texHeight;
-        Matrix4f matrix4f = matrices.peek().getModel();
-        buffer.vertex(matrix4f, (float)x, (float)height+y, (float)0).color(r, g, b, a).texture(u0, v1).overlay(overlay).light(light).normal((float)x, (float)height+y, (float)0).next();
-        buffer.vertex(matrix4f, (float)width+x, (float)height+y, (float)0).color(r, g, b, a).texture(u1, v1).overlay(overlay).light(light).normal((float)width+x, (float)height+y, (float)0).next();
-        buffer.vertex(matrix4f, (float)width+x, (float)y, (float)0).color(r, g, b, a).texture(u1, v0).overlay(overlay).light(light).normal((float)width+x, (float)y, (float)0).next();
-        buffer.vertex(matrix4f, (float)x, (float)y, (float)0).color(r, g, b, a).texture(u0, v0).overlay(overlay).light(light).normal((float)x, (float)y, (float)0).next();
-    }*/
+    private float delta(Vec3d pos) {
+        double d2 = start.distanceTo(pos);
+        return (float) (d2 / dist);
+    }
 
     private void flatQuad(VertexConsumer buffer, MatrixStack matrices, Vec3d pos, int width, int height, int u, int v, int uw, int vh, int texW, int texH) {
         float u0 = (float)u / (float)texW;
@@ -131,7 +118,6 @@ public class VibrationParticle extends SpriteBillboardParticle {
         float v1 = ((float)v + (float)vh) / (float)texH;
         Matrix4f matrix = matrices.peek().getModel();
         int light = 15728864;
-        //15728864
         buffer.vertex(matrix, (float)pos.getX(), (float)pos.getY(), (float)pos.getZ()).color(1.0f, 1.0f, 1.0f, 1.0f).texture(u0, v0).overlay(1000).light(light).normal((float)pos.getX(), (float)pos.getY(), (float)pos.getZ()).next();
         buffer.vertex(matrix, (float)pos.getX()+width, (float)pos.getY(), (float)pos.getZ()).color(1.0f, 1.0f, 1.0f, 1.0f).texture(u1, v0).overlay(1000).light(light).normal((float)pos.getX()+width, (float)pos.getY(), (float)pos.getZ()).next();
         buffer.vertex(matrix, (float)pos.getX()+width, (float)pos.getY(), (float)pos.getZ()+height).color(1.0f, 1.0f, 1.0f, 1.0f).texture(u1, v1).overlay(1000).light(light).normal((float)pos.getX()+width, (float)pos.getY(), (float)pos.getZ()+height).next();
@@ -140,13 +126,10 @@ public class VibrationParticle extends SpriteBillboardParticle {
 
     @Environment(EnvType.CLIENT)
     public static class Factory implements ParticleFactory<VibrationParticleEffect> {
-        public Factory(SpriteProvider spriteProvider) {
-        }
+        public Factory(SpriteProvider spriteProvider) {}
 
         @Override
         public Particle createParticle(VibrationParticleEffect parameters, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-            //Vec3d start = new Vec3d(x, y, z);
-            //Vec3d end = new Vec3d(velocityX, velocityY, velocityZ);
             return new VibrationParticle(world, parameters.start, parameters.end, parameters.stages);
         }
     }
